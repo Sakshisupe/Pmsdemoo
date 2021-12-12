@@ -1,0 +1,103 @@
+{% extends 'student_template/base_template.html' %}
+
+{% block page_title %}
+    Manage Projects
+{% endblock page_title %}
+
+{% block main_content %}
+
+{% load static %}
+
+<section class="content">
+        <div class="container-fluid">
+
+            <a class="btn btn-primary" href="{% url 'add_project' %}" role="button">+ Add Project</a> <br/>&nbsp;
+
+            {% if messages %}
+                                <div class="form-group">
+                                <div class="col-12">
+                                    {% for message in messages %}
+                                    {% if message.tags == "error" %}
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                        {{ message }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                    {% elif message.tags == "success" %}
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                        {{ message }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                    {% endif %}
+                                    {% endfor %}
+                                </div>
+                                </div>
+                                {% endif %}
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Project Details</h3>
+
+                            <div class="card-tools">
+                            <div class="input-group input-group-sm" style="width: 150px;">
+                                <input type="text"  class="form-control float-right" placeholder="Search by domain" id="searchtxt" onkeyup="return searchrecords() " >
+                                <div class="input-group-append">
+
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-hover text-nowrap" id = "table1">
+                            <thead>
+                                <tr>
+                                <th>ID</th>
+                                <th>Project Name</th>
+                                <th>Domain</th>
+                                <th>Staff</th>
+                                <th>Report</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                                <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for project in projects %}
+                                <tr>
+                                <td>{{ project.id }}</td>
+                                <td>{{ project.project_name }}</td>
+                                <td>{{ project.domain_id.domain_name }}</td>
+                                <td>{{ project.staff_id.first_name }} {{ project.staff_id.last_name }}</td>
+                                  <td><a href="{{project.project_report.url}}" pdf_view="{{project.project_report.url}}"> view</a></td>
+                                <td>{{ project.created_at }}</td>
+                                <td>{{ project.updated_at }}</td>
+                                <td>
+                                    <a href="{% url 'edit_project' project.id %}" class="btn btn-success">Edit</a> 
+                                    <a href="{% url 'delete_project' project.id %}" class="btn btn-danger">Delete</a>
+                                </td>
+                                </tr>
+                                {% endfor %}
+                                
+                            </tbody>
+                            </table>
+                
+
+                        </div>
+                        <!-- /.card-body -->
+                        </div>
+                    <!-- /.card -->
+
+                </div>
+            </div>
+
+        </div><!-- /.container-fluid -->
+      </section>
+
+  {% endblock main_content %}
